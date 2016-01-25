@@ -33,9 +33,6 @@ class ScaleWorker(object):
 
         env.bit_blt(pBuf, stride, frame.get_read_ptr(), frame.get_pitch(), frame.get_row_size(), frame.get_height())
         image = Image.frombytes("RGB", (w, h), ctypes.string_at(buf, stride*h), "raw", "BGR")
-        image.show()
-        raise
-
         return image.rotate(180).transpose(Image.FLIP_LEFT_RIGHT)
 
     def write_raw(self, type, data):
