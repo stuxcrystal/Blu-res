@@ -65,3 +65,26 @@ class BicubicTester(Tester):
 
         sc_clip = env.invoke("debicubic", [clip, resolution[0], resolution[1]])
         return env.invoke("BicubicResize", [sc_clip, width, height])
+
+@Tester.tester("catrom", "red")
+class CatRomTester(Tester):
+
+    def init(self, env):
+        import avisynth
+
+        assert isinstance(env, avisynth.AVS_ScriptEnvironment)
+        path = os.path.abspath("debicubic.dll")
+        if os.path.exists(path):
+            env.invoke("LoadPlugin", [path])
+
+    def test(self, env, clip, resolution):
+        import avisynth
+
+        assert isinstance(env, avisynth.AVS_ScriptEnvironment)
+        assert isinstance(clip, avisynth.AVS_Clip)
+
+        vi = clip.get_video_info()
+        width, height = vi.width, vi.height
+
+        sc_clip = env.invoke("debicubic", [clip, resolution[0], resolution[1], 0, 0.5], [None, None, "b", "c"])
+        return env.invoke("BicubicResize", [sc_clip, width, height])
